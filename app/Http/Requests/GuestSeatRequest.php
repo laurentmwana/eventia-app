@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\GenderEnum;
-use Illuminate\Validation\Rules\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GuestRequest extends FormRequest
+class GuestSeatRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +22,8 @@ class GuestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'avatar' => ['nullable', 'image', 'max:2048'],
             'name' => ['required', 'string', 'max:255'],
-            'firstname' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:20'],
-            'gender' => ['required', new Enum(GenderEnum::class)],
+            'description' => ['required', 'string'],
             'event_id' => ['required', 'exists:events,id'],
         ];
     }

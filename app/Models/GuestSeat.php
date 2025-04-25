@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Eloquent\GuestSeatEloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,8 +24,13 @@ class GuestSeat extends Model
         return $this->belongsTo(Event::class);
     }
 
-    public function guests(): HasMany
+    public function assignments(): HasMany
     {
-        return $this->hasMany(Guest::class);
+        return $this->hasMany(Assignment::class);
+    }
+
+    public function newEloquentBuilder($query): GuestSeatEloquent
+    {
+        return new GuestSeatEloquent($query);
     }
 }
