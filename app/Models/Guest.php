@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Eloquent\GuestEloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,5 +29,10 @@ class Guest extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function newEloquentBuilder($query): GuestEloquent
+    {
+        return new GuestEloquent($query);
     }
 }

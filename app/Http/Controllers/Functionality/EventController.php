@@ -19,14 +19,14 @@ class EventController extends Controller
             ->with(['guestSeats', 'guests'])
             ->findSearchAndPaginated($request);
 
-        return Inertia::render('/event/index', [
+        return Inertia::render('event/index', [
             'events' => $events,
         ]);
     }
 
     public function create(): Response
     {
-        return Inertia::render('/event/create');
+        return Inertia::render('event/create');
     }
 
     public function store(EventRequest $request): RedirectResponse
@@ -46,7 +46,7 @@ class EventController extends Controller
     {
         $event =  Event::query()->findShow($id);
 
-        return Inertia::render('/event/show', [
+        return Inertia::render('event/show', [
             'event' => $event,
         ]);
     }
@@ -55,11 +55,10 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        return Inertia::render('/event/edit', [
+        return Inertia::render('event/edit', [
             'event' => $event,
         ]);
     }
-
 
     public function update(EventRequest $request, string $id)
     {
