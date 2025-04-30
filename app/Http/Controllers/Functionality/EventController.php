@@ -64,7 +64,9 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        DB::transaction(fn() => $event->update($request->validated()));
+        DB::transaction(
+            fn() => $event->update($request->validated())
+        );
 
         return redirect()->route('event.index')
             ->with('success', 'votre évènement a bien été modifié');

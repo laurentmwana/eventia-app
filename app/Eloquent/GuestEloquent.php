@@ -7,10 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-
 class GuestEloquent extends Builder
 {
-
     public function findSearchAndPaginated(Request $request): LengthAwarePaginator
     {
         return $this->orderBy("updated_at", "desc")

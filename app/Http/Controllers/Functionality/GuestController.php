@@ -31,12 +31,9 @@ class GuestController extends Controller
 
     public function store(GuestRequest $request): RedirectResponse
     {
-        $user = $request->user();
-
-        DB::transaction(fn() => Guest::create([
-            'user_id' => $user->id,
-            ...$request->validated(),
-        ]));
+        DB::transaction(
+            fn() => Guest::create($request->validated())
+        );
 
         return redirect()->route('guest.index')
             ->with('success', 'un invité ajouté dans l\'évènement');
@@ -64,7 +61,9 @@ class GuestController extends Controller
     {
         $guest = Guest::findOrFail($id);
 
-        DB::transaction(fn() => $guest->update($request->validated()));
+        DB::transaction(
+            fn() => $guest->update($request->validated())
+        );
 
         return redirect()->route('guest.index')
             ->with('success', 'les informations de l\'invité a bien été modifié');

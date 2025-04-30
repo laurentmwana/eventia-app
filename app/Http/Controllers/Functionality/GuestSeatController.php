@@ -34,7 +34,7 @@ class GuestSeatController extends Controller
         DB::transaction(fn() => GuestSeat::create($request->validated()));
 
         return redirect()->route('guest-seat.index')
-            ->with('success', 'un invité ajouté dans l\'évènement');
+            ->with('success', 'une place d\'un invité ajouté dans l\'évènement');
     }
 
     public function show(string $id): Response
@@ -59,10 +59,12 @@ class GuestSeatController extends Controller
     {
         $guestSeat = GuestSeat::findOrFail($id);
 
-        DB::transaction(fn() => $guestSeat->update($request->validated()));
+        DB::transaction(
+            fn() => $guestSeat->update($request->validated())
+        );
 
         return redirect()->route('guest-seat.index')
-            ->with('success', 'les informations de l\'invité a bien été modifié');
+            ->with('success', 'une place de l\'invité a bien été modifié');
     }
 
     public function destroy(Request $request, string $id): RedirectResponse
@@ -76,6 +78,6 @@ class GuestSeatController extends Controller
         $guestSeat->delete();
 
         return redirect()->route('guest-seat.index')
-            ->with('success', 'un invité a été supprimé');
+            ->with('success', 'une place pour un  invité a été supprimé');
     }
 }
