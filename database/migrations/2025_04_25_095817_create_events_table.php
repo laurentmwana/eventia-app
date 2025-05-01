@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('status', array_map(
                 fn(EventStatusEnum $enum) => $enum->value,
                 EventStatusEnum::cases(),
-            ));
+            ))->default(EventStatusEnum::NEXT->value);
             $table->enum('type', array_map(
                 fn(EventTypeEnum $enum) => $enum->value,
                 EventTypeEnum::cases(),

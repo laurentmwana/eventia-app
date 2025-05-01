@@ -34,7 +34,7 @@ class GuestSeatController extends Controller
         DB::transaction(fn() => GuestSeat::create($request->validated()));
 
         return redirect()->route('guest-seat.index')
-            ->with('success', 'une place d\'un invité ajouté dans l\'évènement');
+            ->with('success', 'une place d\'un invité a été ajouté');
     }
 
     public function show(string $id): Response

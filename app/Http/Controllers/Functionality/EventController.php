@@ -10,9 +10,13 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\EventRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use App\Services\Upload\FileUploadAction;
 
 class EventController extends Controller
 {
+    private const PATH_IMAGE = "events";
+
+    public function __construct(private FileUploadAction $upload) {}
     public function index(Request $request): Response
     {
         $events = Event::query()
@@ -33,9 +37,21 @@ class EventController extends Controller
     {
         $user = $request->user();
 
+        $dto = $request->toDto();
+
+        $imageUrl = $this->upload->handle(
+            self::PATH_IMAGE,
+            $dto->image,
+        );
+
         DB::transaction(fn() => Event::create([
             'user_id' => $user->id,
-            ...$request->validated(),
+            'title' => $dto->title,
+            'type' => $dto->type->value,
+            'start_at' => $dto->startAt,
+            'end_at' => $dto->endAt,
+            'description' => $dto->description,
+            'image' => $imageUrl,
         ]));
 
         return redirect()->route('event.index')
@@ -64,9 +80,26 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        DB::transaction(
-            fn() => $event->update($request->validated())
-        );
+        DB::transaction(function () use ($event, $request) {
+
+            $dto = $request->toDto();
+
+            $imageUrl = $this->upload->handle(
+                self::PATH_IMAGE,
+                $dto->image,
+                $event->image
+            );
+
+            $event->update([
+                'title' => $dto->title,
+                'type' => $dto->type->value,
+                'start_at' => $dto->startAt,
+                'end_at' => $dto->endAt,
+                'description' => $dto->description,
+                'image' => $imageUrl,
+            ]);
+        });
+
 
         return redirect()->route('event.index')
             ->with('success', 'votre évènement a bien été modifié');
@@ -80,7 +113,15 @@ class EventController extends Controller
 
         $event = Event::findOrFail($id);
 
-        $event->delete();
+        DB::transaction(function () use ($event) {
+
+            $state = $event->delete();
+
+            if ($state) {
+                $this->upload->fileUpload->delete($event->image);
+            }
+        });
+
 
         return redirect()->route('event.index')
             ->with('success', 'votre évènement a bien été supprimé');

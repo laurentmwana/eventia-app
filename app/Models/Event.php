@@ -14,14 +14,14 @@ class Event extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'image',
         'title',
         'status',
         'description',
         'type',
         'start_at',
-        'end_at'
+        'end_at',
+        'user_id'
     ];
 
     public function user(): BelongsTo

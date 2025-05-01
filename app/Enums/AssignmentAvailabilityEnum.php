@@ -9,5 +9,4 @@ enum AssignmentAvailabilityEnum: string
     case ACCEPT = "Accepter";
 
     case REFUSE = "Réfuser";
-
 }
