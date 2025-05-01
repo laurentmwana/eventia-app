@@ -17,10 +17,14 @@ class EventController extends Controller
     private const PATH_IMAGE = "events";
 
     public function __construct(private FileUploadAction $upload) {}
+
     public function index(Request $request): Response
     {
+        $user = $request->user();
+
         $events = Event::query()
             ->with(['guestSeats', 'guests'])
+            ->where(['user_id' => $user->id])
             ->findSearchAndPaginated($request);
 
         return Inertia::render('event/index', [
