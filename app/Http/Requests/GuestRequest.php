@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Dto\GuestDto;
 use App\Enums\GenderEnum;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,5 +32,10 @@ class GuestRequest extends FormRequest
             'gender' => ['required', new Enum(GenderEnum::class)],
             'event_id' => ['required', 'exists:events,id'],
         ];
+    }
+
+    public function toDto(): GuestDto
+    {
+        return new GuestDto($this->validated());
     }
 }

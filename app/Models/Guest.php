@@ -13,7 +13,7 @@ class Guest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'guest_id',
+        'event_id',
         'avatar',
         'phone',
         'gender',
@@ -24,11 +24,6 @@ class Guest extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 
     public function newEloquentBuilder($query): GuestEloquent

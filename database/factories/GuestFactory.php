@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\GenderEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,11 @@ class GuestFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name(),
+            'firstname' => $this->faker->firstName(),
+            'phone' => $this->faker->phoneNumber(),
+            'gender' => $this->faker->randomElement(GenderEnum::cases())->value,
+            'avatar' => $this->faker->imageUrl(640, 480, 'avatars', true),
         ];
     }
 }

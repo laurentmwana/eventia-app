@@ -3,16 +3,21 @@
 namespace App\Http\Controllers\Functionality;
 
 use Inertia\Inertia;
+use App\Models\Guest;
 use Inertia\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\GuestRequest;
 use App\Http\Controllers\Controller;
-use App\Models\Guest;
 use Illuminate\Http\RedirectResponse;
+use App\Services\Upload\FileUploadAction;
 
 class GuestController extends Controller
 {
+    private const PATH_IMAGE = "guests";
+
+    public function __construct(private FileUploadAction $upload) {}
+
     public function index(Request $request): Response
     {
         $events = Guest::query()
@@ -32,7 +37,23 @@ class GuestController extends Controller
     public function store(GuestRequest $request): RedirectResponse
     {
         DB::transaction(
-            fn() => Guest::create($request->validated())
+            function () use ($request) {
+                $dto = $request->toDto();
+
+                $avatarUrl = $this->upload->handle(
+                    self::PATH_IMAGE,
+                    $dto->avatar,
+                );
+
+                Guest::create([
+                    'name' => $dto->name,
+                    'firstname' => $dto->firstname,
+                    'phone' => $dto->phone,
+                    'gender' => $dto->gender,
+                    'event_id' => $dto->eventId,
+                    'avatar' => $avatarUrl,
+                ]);
+            }
         );
 
         return redirect()->route('guest.index')
@@ -62,7 +83,24 @@ class GuestController extends Controller
         $guest = Guest::findOrFail($id);
 
         DB::transaction(
-            fn() => $guest->update($request->validated())
+            function () use ($request, $guest) {
+                $dto = $request->toDto();
+
+                $avatarUrl = $this->upload->handle(
+                    self::PATH_IMAGE,
+                    $dto->avatar,
+                    $guest->avatar
+                );
+
+                $guest->update([
+                    'name' => $dto->name,
+                    'firstname' => $dto->firstname,
+                    'phone' => $dto->phone,
+                    'gender' => $dto->gender,
+                    'event_id' => $dto->eventId,
+                    'avatar' => $avatarUrl,
+                ]);
+            }
         );
 
         return redirect()->route('guest.index')

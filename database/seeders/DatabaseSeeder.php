@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Event;
+use App\Models\Guest;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,6 +27,12 @@ class DatabaseSeeder extends Seeder
         foreach (User::all() as $user) {
             Event::factory(3)->create([
                 'user_id' => $user->id
+            ]);
+        }
+
+        foreach (Event::all() as $event) {
+            Guest::factory(10)->create([
+                'event_id' => $event->id
             ]);
         }
     }
