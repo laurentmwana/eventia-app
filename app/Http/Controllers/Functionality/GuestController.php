@@ -21,7 +21,7 @@ class GuestController extends Controller
     public function index(Request $request): Response
     {
         $events = Guest::query()
-            ->with(['user', 'event'])
+            ->with(['event'])
             ->findSearchAndPaginated($request);
 
         return Inertia::render('guest/index', [
