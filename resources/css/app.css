@@ -156,4 +156,51 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    .container-welcome {
+        @apply mx-auto w-full max-w-4xl px-2 lg:px-4;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    #custom-response-table,
+    #custom-response-table tbody,
+    #custom-response-table tfoot,
+    #custom-response-table tr,
+    #custom-response-table th,
+    #custom-response-table td {
+        @apply block;
+    }
+
+    #custom-response-table tr {
+        @apply bg-background mb-[30px] border-b-0;
+    }
+
+    #custom-response-table tr:hover {
+        @apply bg-inherit;
+    }
+
+    #custom-response-table thead {
+        display: none;
+    }
+
+    #custom-response-table td {
+        @apply border-muted-foreground/20 relative -mt-[1px] border-b ps-[170px];
+    }
+
+    #custom-response-table td::before {
+        @apply border-muted-foreground/20 absolute top-0 bottom-0 left-0 flex w-[145px] items-center justify-center border-e p-3 text-center content-[attr(data-label)];
+    }
+}
+
+::-webkit-scrollbar {
+    @apply h-1 w-1;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-background p-2;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply rounded-sm bg-gray-500;
 }
