@@ -20,12 +20,12 @@ class GuestController extends Controller
 
     public function index(Request $request): Response
     {
-        $events = Guest::query()
-            ->with(['event'])
+        $guests = Guest::query()
+            ->with(['event', 'assignment'])
             ->findSearchAndPaginated($request);
 
         return Inertia::render('guest/index', [
-            'events' => $events,
+            'guests' => $guests,
         ]);
     }
 
@@ -62,10 +62,10 @@ class GuestController extends Controller
 
     public function show(string $id): Response
     {
-        $event =  Guest::query()->findShow($id);
+        $guest =  Guest::query()->findShow($id);
 
         return Inertia::render('guest/show', [
-            'event' => $event,
+            'guest' => $guest,
         ]);
     }
 

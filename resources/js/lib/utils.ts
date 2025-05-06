@@ -5,13 +5,9 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export function excerpt(
-    text: string,
-    limit: number = 100,
-    separator: string = '...'
-  ): string {
+export function excerpt(text: string, limit: number = 100, separator: string = '...'): string {
     if (text.length <= limit) {
-      return text;
+        return text;
     }
 
     let truncated = text.substring(0, limit);
@@ -19,8 +15,12 @@ export function excerpt(
     const lastSpaceIndex = truncated.lastIndexOf(' ');
 
     if (lastSpaceIndex > 0) {
-      truncated = truncated.substring(0, lastSpaceIndex);
+        truncated = truncated.substring(0, lastSpaceIndex);
     }
 
     return truncated + separator;
-  }
+}
+
+export const storageUrl = (source: string | null, defaultSource: string): string => {
+    return !source ? defaultSource : `/storage/${source}`;
+};

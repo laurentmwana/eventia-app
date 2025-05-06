@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Eloquent\GuestEloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -20,6 +21,11 @@ class Guest extends Model
         'firstname',
         'name',
     ];
+
+    public function assignment(): HasOne
+    {
+        return $this->hasOne(Assignment::class);
+    }
 
     public function event(): BelongsTo
     {
