@@ -4,11 +4,14 @@ namespace App\Eloquent;
 
 use App\Models\GuestSeat;
 use Illuminate\Http\Request;
+use App\Eloquent\SearchDataEloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class GuestSeatEloquent extends Builder
 {
+    private const SEARCH_COLUMNS = ['name', 'description', 'event_id'];
+
     /**
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Pagination\LengthAwarePaginator
@@ -17,8 +20,14 @@ class GuestSeatEloquent extends Builder
     {
         $searchValue = $request->query('search');
 
-        return $this->orderBy("updated_at", "desc")
-            ->paginate(10);
+        $builder =  $this->orderBy("updated_at", "desc");
+
+        return SearchDataEloquent::handle(
+            $builder,
+            $searchValue,
+            self::SEARCH_COLUMNS
+        )
+            ->paginate();
     }
 
     /**

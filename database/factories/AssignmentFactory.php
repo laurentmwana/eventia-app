@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Enums\AssignmentTypeEnum;
+use App\Models\Guest;
+use App\Models\GuestSeat;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +20,9 @@ class AssignmentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'guest_id' => Guest::all()->random()->id,
+            'guest_seat_id' => GuestSeat::all()->random()->id,
+            'type' => $this->faker->randomElement(AssignmentTypeEnum::cases())->value,
         ];
     }
 }

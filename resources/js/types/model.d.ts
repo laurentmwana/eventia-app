@@ -36,13 +36,13 @@ export interface GuestSeatModel {
     name: string;
     description: string;
     event: EventModel;
+    category: string;
     created_at: string;
     updated_at: string;
 }
 
 export interface AssignmentModel {
     id: number;
-    category: string;
     type: string;
     availability: string;
     guest: GuestModel;

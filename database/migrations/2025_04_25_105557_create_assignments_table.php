@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\AssignmentCategoryEnum;
+use App\Enums\GuestSeatCategoryEnum;
 use App\Enums\AssignmentTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -30,11 +30,6 @@ return new class extends Migration
             $table->enum('type', array_map(
                 fn(AssignmentTypeEnum $enum) => $enum->value,
                 AssignmentTypeEnum::cases(),
-            ));
-
-            $table->enum('category', array_map(
-                fn(AssignmentCategoryEnum $enum) => $enum->value,
-                AssignmentCategoryEnum::cases(),
             ));
 
             $table->timestamps();

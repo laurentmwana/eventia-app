@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\DTO\AssignmentDto;
 use App\Enums\AssignmentTypeEnum;
-use App\Enums\AssignmentCategoryEnum;
+use App\Enums\GuestSeatCategoryEnum;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -26,9 +27,13 @@ class AssignmentRequest extends FormRequest
     {
         return [
             'type' => ['required', new Enum(AssignmentTypeEnum::class)],
-            'category' => ['required', new Enum(AssignmentCategoryEnum::class)],
             'guest_id' => ['required', 'exists:guests,id'],
             'guest_seat_id' => ['required', 'exists:guest_seats,id'],
         ];
+    }
+
+    public function toDto(): AssignmentDto
+    {
+        return new AssignmentDto($this->validated());
     }
 }

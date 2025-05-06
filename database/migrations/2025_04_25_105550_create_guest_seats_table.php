@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Enums\AssignmentTypeEnum;
+use App\Enums\GuestSeatCategoryEnum;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -19,6 +21,12 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
+
+
+            $table->enum('category', array_map(
+                fn(GuestSeatCategoryEnum $enum) => $enum->value,
+                GuestSeatCategoryEnum::cases(),
+            ));
             $table->timestamps();
         });
     }

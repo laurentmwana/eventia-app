@@ -184,7 +184,7 @@ export default function Show() {
                                                     <Link href={route('guest.show', { id: guest.id })}>Voir détails</Link>
                                                 </Button>
                                             </CardContent>
-                                        </Card>
+                                        </Carùd>
                                     ))}
                                 </div>
                             </TabsContent>
