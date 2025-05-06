@@ -48,7 +48,9 @@ class GuestSeatController extends Controller
 
     public function show(string $id): Response
     {
-        $guestSeat =  GuestSeat::query()->findShow($id);
+        $guestSeat =  GuestSeat::query()
+            ->with(['event', 'assignments', 'assignments.guest'])
+            ->findShow($id);
 
         return Inertia::render('guest-seat/show', [
             'guestSeat' => $guestSeat,

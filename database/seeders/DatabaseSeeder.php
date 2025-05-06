@@ -6,6 +6,8 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Event;
 use App\Models\Guest;
+use App\Models\GuestSeat;
+use App\Models\Assignment;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -35,5 +37,9 @@ class DatabaseSeeder extends Seeder
                 'event_id' => $event->id
             ]);
         }
+
+        GuestSeat::factory()->create();
+
+        Assignment::factory()->create();
     }
 }

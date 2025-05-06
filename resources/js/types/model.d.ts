@@ -37,6 +37,8 @@ export interface GuestSeatModel {
     description: string;
     event: EventModel;
     category: string;
+    event_id: number;
+    assignments: AssignmentModel[];
     created_at: string;
     updated_at: string;
 }

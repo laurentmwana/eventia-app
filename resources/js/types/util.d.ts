@@ -12,4 +12,5 @@ export interface EventUserModel {
 
 export interface DataValueEnumModel {
     genders: string[]
+    guest_seat_categories: string[]
 }
