@@ -1,13 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { storageUrl } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
-import { GuestModel } from '@/types/model';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { CalendarIcon, PhoneIcon, UserIcon } from 'lucide-react';
+import { AssignmentModel } from '@/types/model';
+import { Head, usePage } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,10 +17,10 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-type ShowProps = { guest: GuestModel };
+type ShowProps = { assignment: AssignmentModel };
 
 export default function Show() {
-    const { guest } = usePage<ShowProps>().props;
+    const { assignment } = usePage<ShowProps>().props;
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('fr-FR', {
@@ -38,100 +34,99 @@ export default function Show() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Evènement #${guest.id}`} />
+            <Head title={`Affectation #${assignment.id}`} />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl md:min-h-min">
                     <div>
-                        <div className="grid gap-6 md:grid-cols-3">
-                            {/* Carte principale de l'invité */}
-                            <Card className="md:col-span-2">
-                                <CardHeader className="flex flex-row items-center gap-4">
-                                    <Avatar className="h-16 w-16">
-                                        <AvatarImage src={storageUrl(guest.avatar, '/avatar.png')} alt={`${guest.firstname} ${guest.name}`} />
-                                        <AvatarFallback>{`${guest.firstname.charAt(0)}${guest.name.charAt(0)}`}</AvatarFallback>
-                                    </Avatar>
-                                    <div>
-                                        <CardTitle className="text-2xl">{`${guest.firstname} ${guest.name}`}</CardTitle>
-                                        <CardDescription className="flex items-center gap-2">
-                                            <UserIcon className="h-4 w-4" />
-                                            <span>{guest.gender}</span>
-                                            <PhoneIcon className="ml-2 h-4 w-4" />
-                                            <span>{guest.phone}</span>
-                                        </CardDescription>
-                                    </div>
+                        <div className="mb-8 flex items-center justify-between">
+                            <div>
+                                <h1 className="text-3xl font-bold tracking-tight">Détails de l'affectation</h1>
+                                <p className="text-muted-foreground">Affichage de l'affectation #{assignment.id}</p>
+                            </div>
+                            <Badge variant="secondary">{assignment.availability}</Badge>
+                        </div>
+
+                        <div className="grid gap-6 md:grid-cols-2">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Informations sur l'affectation</CardTitle>
+                                    <CardDescription>Détails de base sur cette affectation</CardDescription>
                                 </CardHeader>
-
                                 <CardContent className="space-y-4">
-                                    <div>
-                                        <h3 className="mb-2 font-medium">Informations de l'invité</h3>
-                                        <div className="grid grid-cols-2 gap-y-2 rounded-lg border p-4 text-sm">
-                                            <span className="text-muted-foreground">ID:</span>
-                                            <span>{guest.id}</span>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="text-muted-foreground text-sm font-medium">ID</div>
+                                        <div className="text-sm">{assignment.id}</div>
 
-                                            <span className="text-muted-foreground">Créé le:</span>
-                                            <span>{formatDate(guest.created_at)}</span>
+                                        <div className="text-muted-foreground text-sm font-medium">Type</div>
+                                        <div className="text-sm">{assignment.type}</div>
 
-                                            <span className="text-muted-foreground">Mis à jour le:</span>
-                                            <span>{formatDate(guest.updated_at)}</span>
+                                        <div className="text-muted-foreground text-sm font-medium">Disponibilité</div>
+                                        <div className="text-sm">
+                                            <Badge variant="secondary">{assignment.availability}</Badge>
                                         </div>
+
+                                        <div className="text-muted-foreground text-sm font-medium">Créé le</div>
+                                        <div className="text-sm">{formatDate(assignment.created_at)}</div>
+
+                                        <div className="text-muted-foreground text-sm font-medium">Mis à jour le</div>
+                                        <div className="text-sm">{formatDate(assignment.updated_at)}</div>
                                     </div>
-
-                                    {guest.assignment && (
-                                        <div>
-                                            <h3 className="mb-2 font-medium">Assignation</h3>
-                                            <div className="rounded-lg border p-4">
-                                                <div className="mb-2 flex items-center justify-between">
-                                                    <Badge variant={guest.assignment.availability === 'Confirmé' ? 'secondary' : 'outline'}>
-                                                        {guest.assignment.availability}
-                                                    </Badge>
-                                                    <span className="text-muted-foreground text-sm">ID: {guest.assignment.id}</span>
-                                                </div>
-
-                                                <div className="grid grid-cols-2 gap-y-2 text-sm">
-                                                    <span className="text-muted-foreground">Type:</span>
-                                                    <span>{guest.assignment.type}</span>
-
-                                                    <span className="text-muted-foreground">Siège:</span>
-                                                    <span>{guest.assignment.guest_seat.name}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
                                 </CardContent>
                             </Card>
 
-                            {/* Carte de l'événement */}
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="text-lg">Événement associé</CardTitle>
+                                    <CardTitle>Informations sur l'invité</CardTitle>
+                                    <CardDescription>Détails sur l'invité assigné</CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
-                                    <div className="aspect-video overflow-hidden rounded-md">
-                                        <img
-                                            src={storageUrl(guest.event.image, '/event.png')}
-                                            alt={guest.event.title}
-                                            className="h-full w-full object-cover"
-                                        />
-                                    </div>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="text-muted-foreground text-sm font-medium">ID de l'invité</div>
+                                        <div className="text-sm">{assignment.guest_id}</div>
 
-                                    <div>
-                                        <h3 className="text-xl font-medium">{guest.event.title}</h3>
-                                        <div className="text-muted-foreground mt-2 flex items-center gap-2 text-sm">
-                                            <CalendarIcon className="h-4 w-4" />
-                                            <span>{formatDate(guest.event.start_at)}</span>
-                                        </div>
-                                        <Badge className="mt-2">{guest.event.type}</Badge>
-                                        <Badge variant={guest.event.status === 'Confirmé' ? 'secondary' : 'outline'} className="mt-2 ml-2">
-                                            {guest.event.status}
-                                        </Badge>
-                                        <p className="mt-3 text-sm">{guest.event.description}</p>
+                                        <div className="text-muted-foreground text-sm font-medium">Nom</div>
+                                        <div className="text-sm">{assignment.guest.name}</div>
+
+                                        {assignment.guest.phone && (
+                                            <>
+                                                <div className="text-muted-foreground text-sm font-medium">Téléphone</div>
+                                                <div className="text-sm">{assignment.guest.phone}</div>
+                                            </>
+                                        )}
                                     </div>
                                 </CardContent>
-                                <CardFooter>
-                                    <Button asChild className="w-full">
-                                        <Link href={route('event.show', { id: guest.event_id })}>Voir l'événement</Link>
-                                    </Button>
-                                </CardFooter>
+                            </Card>
+
+                            <Card className="md:col-span-2">
+                                <CardHeader>
+                                    <CardTitle>Informations sur le siège</CardTitle>
+                                    <CardDescription>Détails sur le siège assigné</CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                                        <div>
+                                            <div className="text-muted-foreground text-sm font-medium">ID du siège</div>
+                                            <div className="text-sm">{assignment.guest_seat_id}</div>
+                                        </div>
+
+                                        <div>
+                                            <div className="text-muted-foreground text-sm font-medium">Numéro de siège</div>
+                                            <div className="text-sm">{assignment.guest_seat.seat_number}</div>
+                                        </div>
+
+                                        <div>
+                                            <div className="text-muted-foreground text-sm font-medium">Section</div>
+                                            <div className="text-sm">{assignment.guest_seat.section}</div>
+                                        </div>
+
+                                        {assignment.guest_seat.location && (
+                                            <div>
+                                                <div className="text-muted-foreground text-sm font-medium">Emplacement</div>
+                                                <div className="text-sm">{assignment.guest_seat.location}</div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </CardContent>
                             </Card>
                         </div>
                     </div>

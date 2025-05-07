@@ -7,20 +7,18 @@ use Illuminate\Http\Request;
 use App\Enums\EventStatusEnum;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
 class DataValueEventController extends Controller
 {
-    public function eventsUser(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
-        $user = Auth::user();
+        $user = $request->user();
 
-        $events = Event::where('user_id', '=', $user->id)
-            ->whereIn('status', [
-                EventStatusEnum::PENDING->value,
-                EventStatusEnum::NEXT->value,
-            ])
-            ->get(['title', 'status', 'id']);
+        if (!$user) {
+            return response()->json(['error' => 'Utilisateur non authentifié'], 401);
+        }
+
+        $events = Event::quert()->findByUserId($user->id);
 
         return response()->json($events);
     }

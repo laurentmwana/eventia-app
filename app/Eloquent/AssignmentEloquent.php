@@ -34,7 +34,14 @@ class AssignmentEloquent extends Builder
      */
     public function findShow(string $id): Assignment
     {
-        return $this->with(['event', 'assignments'])
+        return $this->with(['guestSeat', 'guest', 'guestSeat.event'])
+            ->orderBy("updated_at", "desc")
+            ->findOrFail($id);
+    }
+
+    public function findShowEdit(string $id): Assignment
+    {
+        return $this->with(['guestSeat.event'])
             ->orderBy("updated_at", "desc")
             ->findOrFail($id);
     }

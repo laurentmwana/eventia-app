@@ -48,7 +48,7 @@ export interface AssignmentModel {
     type: string;
     availability: string;
     guest: GuestModel;
-    guest_seat: GuestSeatModels;
+    guest_seat: GuestSeatModel;
     guest_id: number;
     guest_seat_id: number;
     created_at: string;

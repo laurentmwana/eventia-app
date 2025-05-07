@@ -4,6 +4,8 @@ namespace App\Eloquent;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use App\Enums\EventStatusEnum;
+use Illuminate\Support\Collection;
 use App\Eloquent\SearchDataEloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -47,5 +49,20 @@ class EventEloquent extends Builder
         return $this->with(['guestSeats', 'guests'])
             ->orderBy("updated_at", "desc")
             ->findOrFail($id);
+    }
+
+
+    public function findByUserId(int $userId): Collection
+    {
+        return $this->where('user_id', '=', $userId)
+            ->where(function ($builder) {
+                $builder->where('start_at', '>=', now())
+                    ->orWhere('end_at', '>=', now());
+            })->whereIn('status', [
+                EventStatusEnum::PENDING->value,
+                EventStatusEnum::NEXT->value,
+            ])
+            ->get(['title', 'status', 'id'])
+        ;
     }
 }

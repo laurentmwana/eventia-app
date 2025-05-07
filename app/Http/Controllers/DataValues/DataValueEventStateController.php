@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\DataValues;
 
-use Illuminate\Http\Request;
 use App\Enums\EventStatusEnum;
 use App\Enums\EventTypeEnum;
 use Illuminate\Http\JsonResponse;

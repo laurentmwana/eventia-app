@@ -28,6 +28,7 @@ class AssignmentRequest extends FormRequest
         return [
             'type' => ['required', new Enum(AssignmentTypeEnum::class)],
             'guest_id' => ['required', 'exists:guests,id'],
+            'event_id' => ['required', 'exists:guests,id'],
             'guest_seat_id' => ['required', 'exists:guest_seats,id'],
         ];
     }

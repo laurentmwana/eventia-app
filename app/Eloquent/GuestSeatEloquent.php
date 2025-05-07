@@ -20,7 +20,10 @@ class GuestSeatEloquent extends Builder
     {
         $searchValue = $request->query('search');
 
-        $builder =  $this->orderBy("updated_at", "desc");
+        $builder =  $this->orderBy("updated_at", "desc")
+            ->whereHas('event', function ($query) use ($request) {
+                $query->where('user_id', '=', $request->user()->id);
+            });
 
         return SearchDataEloquent::handle(
             $builder,
@@ -39,5 +42,12 @@ class GuestSeatEloquent extends Builder
         return $this->with(['event', 'assignments'])
             ->orderBy("updated_at", "desc")
             ->findOrFail($id);
+    }
+
+    public function findByEvent(int $eventId)
+    {
+        return $this->where('event_id', '=', $eventId)
+            ->orderByDesc('updated_at')
+            ->get(['name', 'id', 'category']);
     }
 }

@@ -32,14 +32,27 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+
+        $assignmentData = [];
+
         foreach (Event::all() as $event) {
-            Guest::factory(10)->create([
+            $guests = Guest::factory(60)->create([
                 'event_id' => $event->id
             ]);
+
+            $guestSeats = GuestSeat::factory(30)->create(['event_id' => $event->id]);
+
+            $assignmentData[$event->id][] = [$guests, $guestSeats];
         }
 
-        GuestSeat::factory()->create();
-
-        Assignment::factory()->create();
+        foreach ($assignmentData as $key => $assignments) {
+            foreach ($assignments as $assignment) {
+                [$guests, $guestSeats] = $assignment;
+                Assignment::factory()->create([
+                    'guest_id' => $guests->random()->id,
+                    'guest_seat_id' => $guestSeats->random()->id,
+                ]);
+            }
+        }
     }
 }

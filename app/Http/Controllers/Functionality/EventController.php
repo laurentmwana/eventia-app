@@ -24,7 +24,7 @@ class EventController extends Controller
 
         $events = Event::query()
             ->with(['guestSeats', 'guests'])
-            ->where(['user_id' => $user->id])
+            ->where('user_id', '=', $user->id)
             ->findSearchAndPaginated($request);
 
         return Inertia::render('event/index', [

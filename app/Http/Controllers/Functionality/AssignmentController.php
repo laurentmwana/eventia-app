@@ -48,19 +48,19 @@ class AssignmentController extends Controller
 
     public function show(string $id): Response
     {
-        $guestSeat =  GuestSeat::query()->findShow($id);
+        $assignment =  Assignment::query()->findShow($id);
 
         return Inertia::render('assignment/show', [
-            'guestSeat' => $guestSeat,
+            'assignment' => $assignment,
         ]);
     }
 
     public function edit(string $id)
     {
-        $guestSeat = GuestSeat::findOrFail($id);
+        $assignment = Assignment::query()->findShowEdit($id);
 
         return Inertia::render('assignment/edit', [
-            'guestSeat' => $guestSeat,
+            'assignment' => $assignment,
         ]);
     }
 
