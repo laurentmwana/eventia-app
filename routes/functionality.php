@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Functionality\{
+    AssignmentController,
     GuestController,
     EventController,
-    GuestSeatController
+    GuestSeatController,
 };
 
 Route::middleware(['auth', 'verified'])
@@ -17,4 +18,7 @@ Route::middleware(['auth', 'verified'])
 
         Route::resource('guest-seat', GuestSeatController::class)
             ->parameter('guest-seat', 'id');
+
+        Route::resource('assignment', AssignmentController::class)
+            ->parameter('assignment', 'id');
     });

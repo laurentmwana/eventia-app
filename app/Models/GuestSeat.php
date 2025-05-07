@@ -17,6 +17,7 @@ class GuestSeat extends Model
         'name',
         'description',
         'event_id',
+        'category',
     ];
 
     public function event(): BelongsTo

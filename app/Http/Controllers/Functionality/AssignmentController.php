@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Functionality;
 
-use index;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\GuestSeat;
@@ -33,9 +32,15 @@ class AssignmentController extends Controller
 
     public function store(AssignmentRequest $request): RedirectResponse
     {
-        DB::transaction(
-            fn() => GuestSeat::create($request->validated())
-        );
+        DB::transaction(function () use ($request) {
+            $dto = $request->toDto();
+
+            Assignment::create([
+                'type' => $dto->type->value,
+                'guest_id' => $dto->guestId,
+                'guest_seat_id' => $dto->guestSeatId,
+            ]);
+        });
 
         return redirect()->route('assignment.index')
             ->with('success', ' Une place a été assignée à un invité.');
@@ -43,29 +48,36 @@ class AssignmentController extends Controller
 
     public function show(string $id): Response
     {
-        $guestSeat =  GuestSeat::query()->findShow($id);
+        $assignment =  Assignment::query()->findShow($id);
 
         return Inertia::render('assignment/show', [
-            'guestSeat' => $guestSeat,
+            'assignment' => $assignment,
         ]);
     }
 
     public function edit(string $id)
     {
-        $guestSeat = GuestSeat::findOrFail($id);
+        $assignment = Assignment::query()->findShowEdit($id);
 
         return Inertia::render('assignment/edit', [
-            'guestSeat' => $guestSeat,
+            'assignment' => $assignment,
         ]);
     }
 
     public function update(AssignmentRequest $request, string $id)
     {
-        $guestSeat = GuestSeat::findOrFail($id);
+        $assignment = Assignment::findOrFail($id);
 
-        DB::transaction(
-            fn() => $guestSeat->update($request->validated())
-        );
+        DB::transaction(function () use ($request, $assignment) {
+            $dto = $request->toDto();
+
+            $assignment->update([
+                'type' => $dto->type->value,
+                'guest_id' => $dto->guestId,
+                'guest_seat_id' => $dto->guestSeatId,
+            ]);
+        });
+
 
         return redirect()->route('assignment.index')
             ->with('success', 'Une place assignée à un invité a été mis à jour');

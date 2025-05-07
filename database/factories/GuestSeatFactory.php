@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\GuestSeatCategoryEnum;
+use App\Models\Event;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,10 @@ class GuestSeatFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name,
+            'description' => $this->faker->sentence,
+            'event_id' => Event::all()->random()->id,
+            'category' => $this->faker->randomElement(GuestSeatCategoryEnum::cases())->value,
         ];
     }
 }

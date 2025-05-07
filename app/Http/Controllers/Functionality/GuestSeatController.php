@@ -6,7 +6,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\GuestRequest;
+use App\Http\Requests\GuestSeatRequest;
 use App\Http\Controllers\Controller;
 use App\Models\GuestSeat;
 use Illuminate\Http\RedirectResponse;
@@ -29,9 +29,18 @@ class GuestSeatController extends Controller
         return Inertia::render('guest-seat/create');
     }
 
-    public function store(GuestRequest $request): RedirectResponse
+    public function store(GuestSeatRequest $request): RedirectResponse
     {
-        DB::transaction(fn() => GuestSeat::create($request->validated()));
+        DB::transaction(function () use ($request) {
+            $dto = $request->toDto();
+
+            GuestSeat::create([
+                'name' => $dto->name,
+                'description' => $dto->description,
+                'category' => $dto->category->value,
+                'event_id' => $dto->eventId,
+            ]);
+        });
 
         return redirect()->route('guest-seat.index')
             ->with('success', 'une place d\'un invité a été ajouté');
@@ -39,7 +48,9 @@ class GuestSeatController extends Controller
 
     public function show(string $id): Response
     {
-        $guestSeat =  GuestSeat::query()->findShow($id);
+        $guestSeat =  GuestSeat::query()
+            ->with(['event', 'assignments', 'assignments.guest'])
+            ->findShow($id);
 
         return Inertia::render('guest-seat/show', [
             'guestSeat' => $guestSeat,
@@ -55,13 +66,19 @@ class GuestSeatController extends Controller
         ]);
     }
 
-    public function update(GuestRequest $request, string $id)
+    public function update(GuestSeatRequest $request, string $id)
     {
         $guestSeat = GuestSeat::findOrFail($id);
 
-        DB::transaction(
-            fn() => $guestSeat->update($request->validated())
-        );
+        DB::transaction(function () use ($request, $guestSeat) {
+            $dto = $request->toDto();
+
+            $guestSeat->update([
+                'name' => $dto->name,
+                'description' => $dto->description,
+                'event_id' => $dto->eventId,
+            ]);
+        });
 
         return redirect()->route('guest-seat.index')
             ->with('success', 'une place de l\'invité a bien été modifié');

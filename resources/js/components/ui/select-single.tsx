@@ -34,7 +34,7 @@ export const SelectSingle: React.FC<SingleSelectProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<Option | undefined>(
-    options.find((option) => option.value === value),
+    options.find((option) => option.value == value),
   )
   const [searchTerm, setSearchTerm] = useState("")
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1)

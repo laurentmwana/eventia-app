@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Dto\GuestSeatDto;
+use App\Enums\GuestSeatCategoryEnum;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GuestSeatRequest extends FormRequest
@@ -25,6 +28,12 @@ class GuestSeatRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'event_id' => ['required', 'exists:events,id'],
+            'category' => ['required', new Enum(GuestSeatCategoryEnum::class)],
         ];
+    }
+
+    public function toDto(): GuestSeatDto
+    {
+        return new GuestSeatDto($this->validated());
     }
 }

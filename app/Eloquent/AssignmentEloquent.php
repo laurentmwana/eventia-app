@@ -9,6 +9,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class AssignmentEloquent extends Builder
 {
+    private const SEARCH_COLUMNS = ['guest_id', 'guest_seat_id', 'type', 'category'];
+
     /**
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Pagination\LengthAwarePaginator
@@ -16,9 +18,14 @@ class AssignmentEloquent extends Builder
     public function findSearchAndPaginated(Request $request): LengthAwarePaginator
     {
         $searchValue = $request->get("search");
-        
-        return $this->orderBy("updated_at", "desc")
-            ->paginate(10);
+
+        $builder =  $this->orderBy("updated_at", "desc");
+
+        return SearchDataEloquent::handle(
+            $builder,
+            $searchValue,
+            self::SEARCH_COLUMNS
+        )->paginate(10);
     }
 
     /**
@@ -27,7 +34,14 @@ class AssignmentEloquent extends Builder
      */
     public function findShow(string $id): Assignment
     {
-        return $this->with(['event', 'assignments'])
+        return $this->with(['guestSeat', 'guest', 'guestSeat.event'])
+            ->orderBy("updated_at", "desc")
+            ->findOrFail($id);
+    }
+
+    public function findShowEdit(string $id): Assignment
+    {
+        return $this->with(['guestSeat.event'])
             ->orderBy("updated_at", "desc")
             ->findOrFail($id);
     }

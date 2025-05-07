@@ -13,7 +13,6 @@ class Assignment extends Model
     use HasFactory;
     protected $fillable = [
         'type',
-        'category',
         'guest_id',
         'guest_seat_id',
     ];

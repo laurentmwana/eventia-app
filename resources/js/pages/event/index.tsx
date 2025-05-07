@@ -45,7 +45,7 @@ export default function Index() {
                                 <TableHead>Status</TableHead>
                                 <TableHead>Type</TableHead>
                                 <TableHead>Créer</TableHead>
-                                <TableHead>Actions</TableHead>
+                                <TableHead  className="lg:text-end">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
 
@@ -59,7 +59,9 @@ export default function Index() {
                                         <TableCell>{event.end_at}</TableCell>
 
                                         <TableCell>
-                                            <Badge variant="outline">15</Badge>
+                                            <Badge variant="outline">
+                                                {event.guests.length}
+                                            </Badge>
                                         </TableCell>
 
                                         <TableCell>

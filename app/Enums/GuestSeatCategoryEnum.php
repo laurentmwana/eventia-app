@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum AssignmentCategoryEnum: string
+enum GuestSeatCategoryEnum: string
 {
     case NORMAL = "normal";
     case VIP = "vip";
