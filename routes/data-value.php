@@ -1,10 +1,13 @@
 <?php
 
-use App\Http\Controllers\DataValues\DataValueEnumController;
-use App\Http\Controllers\DataValues\DataValueGuestSeatController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DataValues\DataValueEventController;
-use App\Http\Controllers\DataValues\DataValueEventStateController;
+use App\Http\Controllers\DataValues\{
+    DataValueStatisticEventController,
+    DataValueEventStateController,
+    DataValueEventController,
+    DataValueGuestSeatController,
+    DataValueEnumController
+};
 
 Route::name('^')
     ->prefix('/data-value')
@@ -19,4 +22,11 @@ Route::name('^')
 
         Route::get('/guest-seat/with/guest', DataValueGuestSeatController::class)
             ->name('guest-seat.guest');
+
+        Route::get('/statistics/monthly', [DataValueStatisticEventController::class, 'getMonthlyStatistics'])
+            ->name('statistic.monthly');
+        Route::get('/statistics/seat-categories', [DataValueStatisticEventController::class, 'getSeatCategoryStatistics'])
+            ->name('statistic.seat');
+        Route::get('/statistics/event-types', [DataValueStatisticEventController::class, 'getEventTypeStatistics'])
+            ->name('statistic.event');
     });
