@@ -6,6 +6,7 @@ use App\Http\Controllers\Functionality\{
     GuestController,
     EventController,
     GuestSeatController,
+    NotificationReceiveController
 };
 
 Route::middleware(['auth', 'verified'])
@@ -21,4 +22,7 @@ Route::middleware(['auth', 'verified'])
 
         Route::resource('assignment', AssignmentController::class)
             ->parameter('assignment', 'id');
+
+        Route::get('notification/receive', NotificationReceiveController::class)
+            ->name('notification.index');
     });
