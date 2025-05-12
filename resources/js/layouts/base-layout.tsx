@@ -17,7 +17,7 @@ export const BaseLayout = ({ children, title }: PropsWithChildren<{ title: strin
             <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a] dark:text-[#EDEDEC]">
                 <header className="container-welcome mb-16 text-sm">
                     <div className="flex items-center justify-between">
-                        <Link href={route('home')} prefetch>
+                        <Link className="flex items-center gap-1" href={route('home')} prefetch>
                             <AppLogo />
                         </Link>
                         <nav className="flex items-center justify-end gap-4">

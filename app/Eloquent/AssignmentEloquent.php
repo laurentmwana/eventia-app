@@ -45,4 +45,15 @@ class AssignmentEloquent extends Builder
             ->orderBy("updated_at", "desc")
             ->findOrFail($id);
     }
+
+    public function findPaginatedAndFilters(Request $request)
+    {
+        $eventId = $request->get("event");
+        $eventStatus = $request->get("event-status");
+
+        $builder =  $this->orderBy("updated_at", "desc");
+
+
+        return $builder->paginate();
+    }
 }

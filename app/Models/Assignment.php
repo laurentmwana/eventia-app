@@ -15,7 +15,9 @@ class Assignment extends Model
         'type',
         'guest_id',
         'guest_seat_id',
+        'is_send_email'
     ];
+    
     public function guest(): BelongsTo
     {
         return $this->belongsTo(Guest::class);

@@ -19,6 +19,8 @@ class AssignmentControllerTest extends TestCase
     protected GuestSeat $guestSeat;
     protected Guest $guest;
 
+    protected Event  $event;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -27,7 +29,7 @@ class AssignmentControllerTest extends TestCase
         $this->user = User::factory()->create();
         $this->actingAs($this->user);
 
-        Event::factory(2)->create(['user_id' => $this->user->id]);
+        $this->event = Event::factory()->create(['user_id' => $this->user->id]);
 
         // Crée un invité et une place
         $this->guest = Guest::factory()->create();
@@ -60,6 +62,7 @@ class AssignmentControllerTest extends TestCase
             'guest_id' => $this->guest->id,
             'guest_seat_id' => $this->guestSeat->id,
             'type' => AssignmentTypeEnum::LONELY->value,
+            'event_id' => $this->event->id,
         ];
 
         $response = $this->post(route('assignment.store'), $payload);
@@ -76,14 +79,18 @@ class AssignmentControllerTest extends TestCase
 
     public function test_show_displays_guest_seat()
     {
-        $response = $this->get(route('assignment.show', $this->guestSeat->id));
+        $assignment = $this->getAssignment();
+
+        $response = $this->get(route('assignment.show', $assignment->id));
 
         $response->assertStatus(200);
     }
 
     public function test_edit_displays_edit_form()
     {
-        $response = $this->get(route('assignment.edit', $this->guestSeat->id));
+        $assignment = $this->getAssignment();
+
+        $response = $this->get(route('assignment.edit', $assignment->id));
 
         $response->assertStatus(200);
     }
@@ -100,6 +107,7 @@ class AssignmentControllerTest extends TestCase
             'guest_id' => $this->guest->id,
             'guest_seat_id' => $this->guestSeat->id,
             'type' => AssignmentTypeEnum::LONELY->value,
+            'event_id' => $this->event->id,
         ];
 
         $response = $this->put(route('assignment.update', $assignment->id), $payload);
@@ -115,29 +123,36 @@ class AssignmentControllerTest extends TestCase
 
     public function test_destroy_requires_password_and_deletes_guest_seat()
     {
-        $guestSeat = GuestSeat::factory()->create();
+        $assignment = $this->getAssignment();
 
-        $response = $this->delete(route('assignment.destroy', $guestSeat->id), [
+        $response = $this->delete(route('assignment.destroy', $assignment->id), [
             'password' => 'password', // mot de passe par défaut factory User
         ]);
 
         $response->assertRedirect(route('assignment.index'));
         $response->assertSessionHas('success', 'Une place a été désassignée à un invité.');
 
-        $this->assertDatabaseMissing('guest_seats', ['id' => $guestSeat->id]);
+        $this->assertDatabaseMissing('assignments', ['id' => $assignment->id]);
     }
 
     public function test_destroy_fails_with_wrong_password()
     {
-        $guestSeat = GuestSeat::factory()->create();
+        $assignment = $this->getAssignment();
 
-        $response = $this->from(route('assignment.index'))->delete(route('assignment.destroy', $guestSeat->id), [
+        $response = $this->from(route('assignment.index'))->delete(route('assignment.destroy', $assignment->id), [
             'password' => 'wrongpassword',
         ]);
 
         $response->assertRedirect(route('assignment.index'));
         $response->assertSessionHasErrors('password');
+    }
 
-        $this->assertDatabaseHas('guest_seats', ['id' => $guestSeat->id]);
+    private function getAssignment()
+    {
+        return      Assignment::factory()->create([
+            'guest_id' => $this->guest->id,
+            'guest_seat_id' => $this->guestSeat->id,
+            'type' => AssignmentTypeEnum::LONELY->value,
+        ]);
     }
 }
