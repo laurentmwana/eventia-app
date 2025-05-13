@@ -51,6 +51,7 @@ export interface AssignmentModel {
     guest_seat: GuestSeatModel;
     guest_id: number;
     guest_seat_id: number;
+    is_send_email: boolean;
     created_at: string;
     updated_at: string;
 }
