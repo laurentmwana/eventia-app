@@ -9,7 +9,7 @@ interface LoaderProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "pulse" | "dual-ring" | "gradient"
 }
 
-export const Loader = ({ size = 24, strokeWidth = 2, color, className, variant = "dual-ring", ...props }: LoaderProps) => {
+export const Loader = ({ size = 24, strokeWidth = 2, color, className, variant = "gradient", ...props }: LoaderProps) => {
   // Handle the color prop properly
   const iconColor = color || "currentColor"
 

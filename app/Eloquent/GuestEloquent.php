@@ -43,10 +43,13 @@ class GuestEloquent extends Builder
      */
     public function findShow(string $id): Guest
     {
-        return $this->with(['guest', 'guestSeat', 'guestSeat.event'])
+        return $this->with(['event', 'assignment'])
             ->orderBy("updated_at", "desc")
             ->findOrFail($id);
     }
+
+
+
 
     public function findByEvent(int $eventId)
     {

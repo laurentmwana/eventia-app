@@ -65,4 +65,31 @@ class EventEloquent extends Builder
             ->get(['title', 'status', 'id'])
         ;
     }
+
+    public function findByInvitationPaginated(Request $request)
+    {
+        $searchValue = $request->query('search');
+
+        $builder =  $this->getQueryByInvitation()
+            ->where('user_id', '=', $request->user()->id)
+            ->orderBy("updated_at", "desc");
+
+        return SearchDataEloquent::handle(
+            $builder,
+            $searchValue,
+            self::SEARCH_COLUMNS
+        )
+            ->paginate();
+    }
+
+    public function findByInvitation(string $id): Event
+    {
+        return $this->getQueryByInvitation()->findOrFail($id);
+    }
+
+    private function getQueryByInvitation()
+    {
+        return $this->with(['guests', 'guestSeats'])
+            ->orderBy("updated_at", "desc");
+    }
 }

@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Map, Option, Pen, User2, UserPen } from 'lucide-react';
+import { Bell, BellDot, LayoutGrid, Map, Option, Pen, UserPen } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -41,9 +41,15 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Utilisateur',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: User2,
+        title: 'Notification Réçu',
+        href: route('notification.receive.index'),
+        icon: Bell,
+    },
+
+    {
+        title: 'Notification Envoyer',
+        href: route('notification.send.index'),
+        icon: BellDot,
     },
 ];
 
